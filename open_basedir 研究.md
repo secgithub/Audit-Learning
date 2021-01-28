@@ -51,7 +51,7 @@ var_dump(scandir('/var/www/ab')); //报错
 ```
 
 
-### 一个失效的直接列举目录的方法
+### 一个失效的直接列举目录的方法(php 5.6环境可用)
 
 在p牛的博客中介绍的一种利用DirectoryIterator + Glob 直接列举目录的方法，glob 数据流包装器从php5.3.0 起开始有效的， 用来查找匹配的文件路径。   此方法在linux列举目录无视open_basedir.
 
